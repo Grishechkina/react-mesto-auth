@@ -4,7 +4,8 @@
   padding: 45px 0 60px 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vw;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 @media (max-width: 930px) {
