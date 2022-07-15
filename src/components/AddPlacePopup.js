@@ -6,6 +6,13 @@ function AddPlacePopup(props) {
   const [name, setName] = React.useState('');
   const [link, setLink] = React.useState('');
 
+  React.useEffect(() => {
+    if (props.isOpen) {
+      setName('')
+      setLink('')
+    }
+  }, [props.isOpen])
+
   function handleNameChange(e) {
     setName(e.target.value);
   }
@@ -20,13 +27,6 @@ function AddPlacePopup(props) {
       name,
       link
     })
-    onClose()
-  }
-
-  function onClose() {
-    setName('')
-    setLink('')
-    props.onClose()
   }
 
   return (
@@ -35,7 +35,7 @@ function AddPlacePopup(props) {
       popupName="add-card-pop-up"
       formName="add-card-form"
       isOpen={props.isOpen}
-      onClose={onClose}
+      onClose={props.onClose}
       onSubmit={handleSubmit}>
       <label className="form__field">
         <input type="text" id="place" name="name" placeholder="Название" className="form__input" required

@@ -5,13 +5,14 @@ function InfoTooltip(props) {
       props.onClose()
     }
   }
+
   return (
     <div className={`pop-up info-tooltip-pop-up${props.isOpen ? ' pop-up_opened' : ''}`} onClick={closeByOverlay}>
       <div className="pop-up__container" >
         <button className="pop-up__close-btn" onClick={props.onClose} />
-        <div className={`info-tooltip-pop-up__icon${props.status === 201 || props.status === 200 ? ' info-tooltip-pop-up__icon_ok' : ' info-tooltip-pop-up__icon_error'}`} />
+        <div className={`info-tooltip-pop-up__icon${props.status === 'ok' ? ' info-tooltip-pop-up__icon_ok' : ' info-tooltip-pop-up__icon_error'}`} />
         <h1 className="info-tooltip-pop-up__title">
-          {(props.status === 201 || props.status === 200) ? 'Вы успешно зарегистрировались!' :
+          {props.status === 'ok' ? 'Вы успешно зарегистрировались!' :
             'Что-то пошло не так! Попробуйте ещё раз.'}
         </h1>
       </div>

@@ -28,10 +28,12 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState([]);
 
-  const [registrationStatus, setRegistrationStatus] = useState(0)
+  const [registrationStatus, setRegistrationStatus] = useState('')
   const [userEmail, setUserEmail] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigation = useNavigate();
+
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link
 
   useEffect(() => {
     tokenCheck()
@@ -56,6 +58,20 @@ function App() {
     }
   }, [isLoggedIn])
 
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if (evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen])
+
   function tokenCheck() {
     if (localStorage.getItem('token')) {
       const token = localStorage.getItem('token');
@@ -65,13 +81,37 @@ function App() {
             setIsLoggedIn(true);
             setUserEmail(res.data.email)
           }
-        });
+        })
+        .catch(err => console.log(err));;
     }
   }
 
-  function handleRegistration(status) {
+  function handleLogin({ email, password }) {
+    auth.authorize(email, password)
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          tokenCheck()
+        }
+      })
+      .catch(err => console.log(err));
+  }
+
+  function handleRegistration({ email, password }) {
+    auth.register(email, password)
+      .then(() => {
+        changeRegStatus('ok')
+        navigation('/sign-in');
+      })
+      .catch((err) => {
+        changeRegStatus('error')
+        console.log(err)
+      });
+  }
+
+  function changeRegStatus(status) {
     setRegistrationStatus(status)
-    setIsInfoTooltipPopupOpen(!!status)
+    setIsInfoTooltipPopupOpen(true)
   }
 
   function handleCardLike(card) {
@@ -93,19 +133,28 @@ function App() {
 
   function handleUpdateUser(user) {
     api.editUserInfo(user)
-      .then(res => setCurrentUser(res))
+      .then(res => {
+        setCurrentUser(res)
+        closeAllPopups()
+      })
       .catch(err => console.log(err))
   }
 
   function handleUpdateAvatar(avatarLink) {
     api.changeAvatar(avatarLink)
-      .then(res => setCurrentUser(res))
+      .then(res => {
+        setCurrentUser(res)
+        closeAllPopups()
+      })
       .catch(err => console.log(err))
   }
 
   function handleAddPlace(place) {
     api.addNewCard(place)
-      .then(res => setCards([res, ...cards]))
+      .then(res => {
+        setCards([res, ...cards])
+        closeAllPopups()
+      })
       .catch(err => console.log(err))
   }
 
@@ -132,15 +181,15 @@ function App() {
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header email={userEmail} toggleIsLoggedIn={setIsLoggedIn}/>
+        <Header email={userEmail} toggleIsLoggedIn={setIsLoggedIn} />
         <Routes>
           <Route
             path="/sign-up"
-            element={<Register onChange={handleRegistration} />}
+            element={<Register onSubmit={handleRegistration} />}
           />
           <Route
             path="/sign-in"
-            element={<Login handleLogin={tokenCheck} />}
+            element={<Login onSubmit={handleLogin} />}
           />
           <Route
             path='/'

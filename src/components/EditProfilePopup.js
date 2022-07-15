@@ -35,17 +35,13 @@ function EditProfilePopup(props) {
     props.onClose()
   }
 
-  function onClose() {
-    props.onClose()
-  }
-
   return (
     <PopupWithForm
       popupHeader="Редактировать профиль"
       popupName="edit-pop-up"
       formName="profile-edit-form"
       isOpen={props.isOpen}
-      onClose={onClose}
+      onClose={props.onClose}
       onSubmit={handleSubmit}>
       <label className="form__field">
         <input type="text" id="name" name="name" placeholder="Имя" className="form__input"

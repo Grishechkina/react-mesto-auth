@@ -9,6 +9,7 @@ export function register(email, password) {
     },
     body: JSON.stringify({ email, password })
   })
+    .then(_checkServerResp)
 }
 
 export function authorize(email, password) {
@@ -19,14 +20,7 @@ export function authorize(email, password) {
     },
     body: JSON.stringify({ email, password })
   })
-    .then((response => response.json()))
-    .then((data) => {
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        return data;
-      }
-    })
-    .catch(err => console.log(err))
+    .then(_checkServerResp)
 }
 
 export function checkToken(token) {
@@ -37,6 +31,12 @@ export function checkToken(token) {
       'Authorization': `Bearer ${token}`,
     }
   })
-    .then(res => res.json())
-    .then(data => data)
-} 
+    .then(_checkServerResp)
+}
+
+function _checkServerResp(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
