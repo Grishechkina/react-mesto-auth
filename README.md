@@ -10,4 +10,4 @@
 Есть возможность регистрации и авторизации!!!
 
 **Ссылка**
-Ссылка на сайт https://grishechkina.github.io/mesto-react/
+Ссылка на сайт https://grishechkina.github.io/react-mesto-auth/#/sign-in
