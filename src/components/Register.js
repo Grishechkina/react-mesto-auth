@@ -5,7 +5,6 @@ import * as auth from '../utils/auth';
 function Register(props) {
   const navigation = useNavigate();
   function onSubmit({ email, password }) {
-    props.onChange({ isMade: true })
     auth.register(email, password)
       .then(res => {
         props.onChange(res.status)
@@ -18,7 +17,9 @@ function Register(props) {
         }
       })
       .then((res) => {
-        navigation('/sign-in');
+        if (res) {
+          navigation('/sign-in');
+        }
         return res;
       })
       .catch((err) => console.log(err));

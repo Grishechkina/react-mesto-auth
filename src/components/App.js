@@ -158,7 +158,7 @@ function App() {
             } />
         </Routes>
         {isLoggedIn && <Footer />}
-        <InfoTooltip registrationStatus
+        <InfoTooltip
           isOpen={isInfoTooltipPopupOpen}
           onClose={closeAllPopups}
           status={registrationStatus}
