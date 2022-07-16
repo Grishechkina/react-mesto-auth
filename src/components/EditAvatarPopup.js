@@ -25,7 +25,8 @@ function EditAvatarPopup(props) {
       formName="avatar-edit-form"
       isOpen={props.isOpen}
       onClose={props.onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      isLoading={props.isLoading}>
       <label className="form__field">
         <input type="url" id="ava-link" name="link" placeholder="Ссылка на аву"
           className="form__input" required ref={avatarRef} />

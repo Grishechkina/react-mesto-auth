@@ -32,7 +32,6 @@ function EditProfilePopup(props) {
       name,
       about: activity,
     });
-    props.onClose()
   }
 
   return (
@@ -42,7 +41,8 @@ function EditProfilePopup(props) {
       formName="profile-edit-form"
       isOpen={props.isOpen}
       onClose={props.onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      isLoading={props.isLoading}>
       <label className="form__field">
         <input type="text" id="name" name="name" placeholder="Имя" className="form__input"
           required minLength="2" maxLength="40" onChange={handleNameChange} value={name} />

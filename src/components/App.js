@@ -31,6 +31,8 @@ function App() {
   const [registrationStatus, setRegistrationStatus] = useState('')
   const [userEmail, setUserEmail] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigation = useNavigate();
 
   const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link
@@ -132,30 +134,36 @@ function App() {
   }
 
   function handleUpdateUser(user) {
+    setIsLoading(true)
     api.editUserInfo(user)
       .then(res => {
         setCurrentUser(res)
         closeAllPopups()
       })
       .catch(err => console.log(err))
+      .finally(() => setIsLoading(false))
   }
 
   function handleUpdateAvatar(avatarLink) {
+    setIsLoading(true)
     api.changeAvatar(avatarLink)
       .then(res => {
         setCurrentUser(res)
         closeAllPopups()
       })
       .catch(err => console.log(err))
+      .finally(() => setIsLoading(false))
   }
 
   function handleAddPlace(place) {
+    setIsLoading(true)
     api.addNewCard(place)
       .then(res => {
         setCards([res, ...cards])
         closeAllPopups()
       })
       .catch(err => console.log(err))
+      .finally(() => setIsLoading(false))
   }
 
   function handleEditAvatarClick() {
@@ -216,16 +224,19 @@ function App() {
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          isLoading={isLoading}
         />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          isLoading={isLoading}
         />
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlace}
+          isLoading={isLoading}
         />
         <ImagePopup
           card={selectedCard}

@@ -36,7 +36,8 @@ function AddPlacePopup(props) {
       formName="add-card-form"
       isOpen={props.isOpen}
       onClose={props.onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      isLoading={props.isLoading}>
       <label className="form__field">
         <input type="text" id="place" name="name" placeholder="Название" className="form__input" required
           minLength="2" maxLength="30" onChange={handleNameChange} value={name} />
